@@ -1,12 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { api } from "./api";
+const fetchServices = async () => {
+  try {
+    const res = await fetch("/api/services/", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
 
-export const useServices = () => {
-  return useQuery({
-    queryKey: ["services"],
-    queryFn: async () => {
-      const { data } = await api.get("/services/");
-      return data;
-    },
-  });
+    if (!res.ok) {
+      throw new Error(`Erreur HTTP ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Erreur de récupération des services :", error);
+    throw error;
+  }
 };
